@@ -1,0 +1,200 @@
+---
+title: 使用 N8N 自動化 SDXL LoRA 訓練流程
+date: '2025-09-10'
+tags: ['AIGC', '自動化']
+draft: false
+layout: PostBanner
+images: ['/static/images/n8n-1/n8n_overall.png']
+summary: 使用 N8N 建置包含 comfyui, kohya_ss 的自動化流程，僅需準備一個裝有圖片的資料夾，剩下的訓練都無需操心！
+---
+
+<section className="mx-auto max-w-4xl my-8 px-4 md:px-0 py-15">
+  {/* not-prose：避免被 Typography 插件改掉 a 樣式 */}
+  <div className="not-prose rounded-2xl border border-stone-200 bg-white shadow-sm dark:bg-stone-900 dark:border-stone-700">
+    <div
+      className="not-prose relative overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm dark:bg-stone-900 dark:border-stone-700"
+    >
+      {/* 背景圖片 + 遮罩 */}
+      <div
+        className="absolute inset-0 z-0 bg-[url('/static/images/n8n-1/n8n_overall.png')] bg-cover bg-center opacity-20"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 z-10 bg-white/30 backdrop-blur-md dark:bg-stone-900/50"
+        aria-hidden="true"
+      />
+
+      {/* 內容本體：z-20 確保在最上層 */}
+      <div className="relative z-20 p-6 md:p-8 text-stone-700 dark:text-stone-300">
+
+        {/* 可留極淡分隔線 */}
+        <div className="h-px bg-gradient-to-r from-transparent via-stone-200 to-transparent dark:via-stone-700" />
+
+        <div className="p-6 md:p-8 text-stone-700 dark:text-stone-300">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+            {/* 遊玩影片 */}
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-50 ring-1 ring-stone-200 text-stone-600 dark:bg-stone-800 dark:ring-stone-700 dark:text-stone-300">
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c0 .7.4 1.3 1.01 1.61.2.11.43.19.67.23H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </span>
+              <div>
+                <dt className="text-sm text-stone-500 dark:text-stone-400">使用工具</dt>
+                <dd className="mt-1">
+                  N8N, Docker, ComfyUI, kohya_ss
+                </dd>
+              </div>
+            </div>
+
+            {/* 耗時 */}
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-50 ring-1 ring-stone-200 text-stone-600 dark:bg-stone-800 dark:ring-stone-700 dark:text-stone-300">
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 3" />
+                </svg>
+              </span>
+              <div>
+                <dt className="text-sm text-stone-500 dark:text-stone-400">耗時</dt>
+                <dd className="mt-1 font-medium">1 day</dd>
+              </div>
+            </div>
+
+            {/* 製作 */}
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-50 ring-1 ring-stone-200 text-stone-600 dark:bg-stone-800 dark:ring-stone-700 dark:text-stone-300">
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <path d="M20 21a8 8 0 1 0-16 0" />
+                  <circle cx="12" cy="8" r="4" />
+                </svg>
+              </span>
+              <div>
+                <dt className="text-sm text-stone-500 dark:text-stone-400">製作</dt>
+                <dd className="mt-1 font-medium">1 Developer</dd>
+              </div>
+            </div>
+
+            {/* 平台 */}
+            <div className="flex items-start gap-3">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-stone-50 ring-1 ring-stone-200 text-stone-600 dark:bg-stone-800 dark:ring-stone-700 dark:text-stone-300">
+                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <rect x="7" y="3" width="10" height="18" rx="2" />
+                  <path d="M11 17h2" />
+                </svg>
+              </span>
+              <div>
+                <dt className="text-sm text-stone-500 dark:text-stone-400">平台</dt>
+                <dd className="mt-1 font-medium">Windows, Linux</dd>
+              </div>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+我有一個非常喜歡的動漫角色，她是來自《藥師少女的獨語》中的貓貓（MaoMao）。貓貓在劇中打扮過多種傳統服飾，但 Civitai 社群上大家只專注在她預設服裝的訓練，
+這對身為貓貓粉絲的我來說實在太可惜了。
+
+> Civitai 是全球最大的 AIGC 社群，有完整 Base Model, Model Type, Category 分類，並且持續最新開源 AI 的支援。
+
+這促使我開始學習訓練貓貓的 LoRA，並且我有個最基本的要求 ─ **貼近原始動漫風格**，因為對我來說，錯誤的風格就是不同的角色，訓練它沒有意義。
+我使用 SDXL（Illustrious）做為 base model，訓練多種貓貓出場過的服裝，至今也累積了[不少作品](https://civitai.com/user/quack12865)。
+
+但每次訓練都需要手動執行很多步驟，包含圖片前處理、標註、資料集準備 ... 等，途中也會涉及不同平台的操作，這讓我覺得非常麻煩且耗時。
+因此我決定使用 N8N 來自動化、標準化這些流程。
+
+> Illustrious 是一個由社群驅動的高品質 Stable Diffusion XL 1.0 基礎模型，由 OnomaAI Research 開發，專門針對插圖和動畫任務進行了最佳化，於 civitai 上累積了超過 10 萬次下載，並且持續更新中。
+
+## N8N Workflow Overview
+
+<div className="flex justify-center">
+  <img src="/static/images/n8n-1/n8n_overall.png" className="h-auto w-[100%] max-w-full" />
+</div>
+
+> 工作流分成上下，上方為啟動訓練、下方為停止訓練
+
+## 啟動訓練
+
+啟動訓練工作流包含以下步驟：
+
+#### _Input LoRA Info_
+
+<div className="flex justify-center">
+  <img src="/static/images/n8n-1/webform.png" className="h-auto w-[60%] max-w-full" />
+</div>
+
+使用 webform 讓使用者輸入 LoRA 訓練資訊，僅需輸入圖片資料夾位置、LoRA 名稱。
+如圖所示，訓練動漫 LORA 僅需 35 ~ 40 張高品質圖像，即可訓練出貼近原始風格、高泛化的作品。而 LoRA 名稱則會被用來命名訓練後的 LoRA 檔案、Trigger Word，我不希望輸入太多資訊，增添訓練難度。
+
+#### _Define Some Constants_
+
+在這邊定義了後續訓練會用到的常數，如檔案路徑（此時也會用到上一步定義的 LoRA 名稱）
+
+#### _comfyui Tag Images_
+
+<div className="flex justify-center">
+  <img src="/static/images/n8n-1/comfyui.png" className="h-auto w-[100%] max-w-full" />
+</div>
+
+這裡使用 ComfyUI 進行標註，參考工作流如上，這個工作流可以輸入指定圖片資料夾，批量的在每張圖片旁邊產生對應的 tag txt file。為了達成自動化，必須將 ComfyUI 串接到 N8N 上。這部分，坊間的教學都圍繞在 text to image（t2i）上，透過在 N8N 中載入第三方套件來輕易達成。
+但這個任務很明顯不適合我的需求，因此需要研讀 ComfyUI 使用的 API，透過 HTTP 進行串接。
+
+簡單來說，ComfyUI 指派任務（如基本 t2i）的底層原理是將指定的 Workflow 當成 HTTP 的 body 傳到後端，後端會回傳一個 prompt id，接著可以透過這個 prompt id 查詢任務狀態，直到任務完成後，再用 prompt id 取得結果。
+
+#### _Check Tag Complete_
+
+<div className="flex justify-center">
+  <img src="/static/images/n8n-1/check_tag.png" className="h-auto w-[60%] max-w-full" />
+</div>
+
+因此在這裡，我們使用一個迴圈，不斷透過 **comfyui Tag Images** 階段回傳的 prompt id 查詢任務狀態，直到標註任務完成。
+
+#### _kohya_ss Dataset Preparation_
+
+<div className="flex justify-center">
+  <img src="/static/images/n8n-1/data_prepare_api.png" className="h-auto w-[80%] max-w-full" />
+</div>
+
+圖片標註完成後，即可開始訓練 LoRA。我們使用 kohya_ss 平台，這裡要做一個 LoRA 訓練前的標準程序 ─ Dataset Preparation，將資料格式標準化以適應平台訓練。不幸的是，這個步驟需要在 kohya_ss 的 GUI 上操作。
+為了要能讓它使用 API 呼叫，我查找了 kohya_ss 的 API（API 文件超過 12 萬行，建議直接透過 LLM 查詢），最後總算找到對應方法可以透過 HTTP 進行呼叫。
+
+#### _kohya_ss Dataset Preparation_
+
+<div className="flex justify-center">
+  <img src="/static/images/n8n-1/http.png" className="h-auto w-[80%] max-w-full" />
+</div>
+
+最後終於可以開始訓練了，這也是最棘手的一步。訓練 LoRA 的參數高達 173 個，要慢慢輸入至 N8N 實在非常困難，因此我開啟 kohya_ss 的 GUI，輸入我想要的參數實際開始訓練，接著使用瀏覽器的開發者工具，查看 HTTP 請求的詳細資料，並將參數複製下來。
+
+### 就大功告成了！
+
+<div className="my-15 flex justify-center">
+  <iframe
+    width="560"
+    height="315"
+    src="https://www.youtube.com/embed/B0dwRMw16qk?si=KgRRYgJdCVCdkQef"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen
+  ></iframe>
+</div>
+
+## 停止訓練
+
+訓練 LoRA 不是一個會立刻完成的任務，通常需要數個小時，因此我們也需要一個工作流來停止訓練，方法同樣可以透過實際在 kohya_ss 上操作，並查看 HTTP 請求的詳細資料進行 N8N 節點設定。
+
+## 結語
+
+訓練 LoRA 的流程繁瑣且容易出錯，透過 N8N 自動化後，只需要準備好圖片資料夾，剩下的都無需操心，大大提升了工作效率！
+
+<div className="flex justify-center">
+  <img src="/static/images/n8n-1/maomao_bg.png" className="h-auto w-[100%] max-w-full" />
+</div>

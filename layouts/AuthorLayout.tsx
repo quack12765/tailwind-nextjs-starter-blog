@@ -9,7 +9,8 @@ interface Props {
 }
 
 export default function AuthorLayout({ children, content }: Props) {
-  const { name, avatar, occupation, company, email, twitter, bluesky, linkedin, github } = content
+  const { name, nickname, avatar, occupation, company, email, twitter, bluesky, linkedin, github } =
+    content
 
   return (
     <>
@@ -19,7 +20,7 @@ export default function AuthorLayout({ children, content }: Props) {
             About
           </h1>
         </div>
-        <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0">
+        <div className="items-start space-y-2 xl:grid xl:grid-cols-3 xl:space-y-0 xl:gap-x-8">
           <div className="flex flex-col items-center space-x-2 pt-8">
             {avatar && (
               <Image
@@ -30,7 +31,12 @@ export default function AuthorLayout({ children, content }: Props) {
                 className="h-48 w-48 rounded-full"
               />
             )}
-            <h3 className="pt-4 pb-2 text-2xl leading-8 font-bold tracking-tight">{name}</h3>
+            <h3 className="pt-4 text-2xl leading-8 font-bold tracking-tight">{name}</h3>
+            {nickname && (
+              <h3 className="text-1xl pb-2 leading-8 font-bold tracking-tight text-gray-500 dark:text-gray-400">
+                {nickname}
+              </h3>
+            )}
             <div className="text-gray-500 dark:text-gray-400">{occupation}</div>
             <div className="text-gray-500 dark:text-gray-400">{company}</div>
             <div className="flex space-x-3 pt-6">
